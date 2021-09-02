@@ -1,0 +1,5 @@
+TEMA,SUBTEMA,NUM_PERG,PERGUNTA,NOME ARQUIVO JS,LINK,TAG_GITHUB,END_TRANSFORMACOES,DESCRICAO,FREQ_DATA,TP_GRAFICO,TITULO
+MEIOAMBIENTE,CONSUMOAGUA,,Qual é o consumo anual  de água comercial em Salvador?,comercial.js,,(re)Conhecendo Salvador,https://github.com/cienciadedadosnaep/rs_dados_meio_ambiente_consumo_agua,,anual,padrao,Consumo anual de água comercial
+MEIOAMBIENTE,CONSUMOAGUA,,Qual é o consumo anual  de água industrial em Salvador?,industrial.js,,(re)Conhecendo Salvador,https://github.com/cienciadedadosnaep/rs_dados_meio_ambiente_consumo_agua,,anual,padrao,Consumo anual de água industrial
+MEIOAMBIENTE,CONSUMOAGUA,,Qual é o consumo anual  de água pública em Salvador?,publica.js,,(re)Conhecendo Salvador,https://github.com/cienciadedadosnaep/rs_dados_meio_ambiente_consumo_agua,,anual,padrao,Consumo anual de água pública
+MEIOAMBIENTE,CONSUMOAGUA,,Qual é o consumo anual de água residencial em Salvador?,residencial.js,,(re)Conhecendo Salvador,https://github.com/cienciadedadosnaep/rs_dados_meio_ambiente_consumo_agua,,anual,padrao,Consumo anual de água residencial

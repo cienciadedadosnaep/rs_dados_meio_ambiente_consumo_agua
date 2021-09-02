@@ -53,6 +53,10 @@ dados %<>% gather(key = classe,
 dados %<>% select(-id)
 # Temas Subtemas Perguntas
 
+##  Perguntas e titulos 
+T_ST_P_No_MEIOAMBIENTE <- read_csv("data/TEMA_SUBTEMA_P_No - MEIOAMBIENTE.csv")
+
+
 classes <- NULL
 classes <- levels(as.factor(dados$classe))
 
@@ -61,16 +65,20 @@ for ( i in 1:length(classes)) {
   
   objeto_0 <- dados %>%
         filter(classe %in% c(classes[i])) %>%
-    select(ano,ocorrencia) %>% filter(ano>2000) %>%
+    select(ano,consumo) %>% filter(ano>2000) %>%
     arrange(ano) %>%
     mutate(ano = as.character(ano)) %>% list()               
   
   exportJson0 <- toJSON(objeto_0)
   
   
-  titulo<-T_ST_P_No_SAUDE$TITULO[i]
+  titulo<-T_ST_P_No_MEIOAMBIENTE$TITULO[i]
   subtexto<-"SEI"
   link <-"http://sim.sei.ba.gov.br/metaside/consulta/frame_metadados.wsp?tmp.tabela=t128" 
+  
+  data_axis <- paste('[',gsub(' ',',',
+                               paste(paste(as.vector(objeto_0[[1]]$ano)),
+                                     collapse = ' ')),']',sep = '')
   
   data_serie <- paste('[',gsub(' ',',',
                                paste(paste(as.vector(objeto_0[[1]]$consumo)),
@@ -84,7 +92,7 @@ for ( i in 1:length(classes)) {
                '"feature":{"dataZoom":{"yAxisIndex":"none"},',
                '"dataView":{"readOnly":false},"magicType":{"type":["line","bar"]},',
                '"restore":{},"saveAsImage":{}}},"xAxis":{"type":"category",',
-               '"data":["2006","2007","2008","2009","2010","2011","2012","2013","2014","2015","2016","2017","2018","2019"]},',
+               '"data":',data_axis,'},',
                '"yAxis":{"type":"value","axisLabel":{"formatter":"{value}"}},',
                '"series":[{"data":',data_serie,',',
                '"type":"bar","color":"#fe4641","showBackground":true,',
@@ -93,9 +101,9 @@ for ( i in 1:length(classes)) {
   
   texto<-noquote(texto)
   
-  write(exportJson0,file = paste('data/',gsub('.js','',T_ST_P_No_SAUDE$`NOME ARQUIVO JS`[i]),
+  write(exportJson0,file = paste('data/',gsub('.js','',T_ST_P_No_MEIOAMBIENTE$`NOME ARQUIVO JS`[i]),
                                  '.json',sep =''))
-  write(texto,file = paste('data/',T_ST_P_No_SAUDE$`NOME ARQUIVO JS`[i],
+  write(texto,file = paste('data/',T_ST_P_No_MEIOAMBIENTE$`NOME ARQUIVO JS`[i],
                            sep =''))
   
 }
