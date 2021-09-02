@@ -1,0 +1,102 @@
+# Dados de consumo anual de água por classe em Salvador 
+# Data criacao 01/9/2021
+# Tabela de dados obtida do site 
+# http://sim.sei.ba.gov.br/metaside/consulta/frame_metadados.wsp?tmp.tabela=t128
+
+######################################################
+# 1) Carregar bibliotecas
+
+library(tidyverse)
+library(magrittr)
+#library(dplyr)
+library(readr)
+library(rjson)
+library(RJSONIO)
+
+# Library para importar dados SQL
+library(DBI)
+library(RMySQL)
+library(pool)
+library(sqldf)
+library(RMariaDB)
+
+# Carragamento de banco de dados
+
+# Settings
+db_user <-'admin'
+db_password <-'password'
+db_name <-'cdnaep'
+#db_table <- 'your_data_table'
+db_host <-'127.0.0.1' # for local access
+db_port <-3306
+
+# 3. Read data from db
+# drv=RMariaDB::MariaDB(),
+mydb <-  dbConnect(drv =RMariaDB::MariaDB(),user =db_user, 
+                   password = db_password ,
+                   dbname = 'cdnaep', host = db_host, port = db_port)
+
+dbListTables(mydb)
+
+s <- paste0("SELECT * from", " consumo_agua")
+rs<-NULL
+rs <- dbSendQuery(mydb, s)
+
+dados<- NULL
+dados <-  dbFetch(rs, n = -1)
+dados
+#dbHasCompleted(rs)
+#dbClearResult(rs)
+
+dados %<>% gather(key = classe,
+                 value = consumo,-ano,-id) 
+dados %<>% select(-id)
+# Temas Subtemas Perguntas
+
+classes <- NULL
+classes <- levels(as.factor(dados$classe))
+
+
+for ( i in 1:length(classes)) {
+  
+  objeto_0 <- dados %>%
+        filter(classe %in% c(classes[i])) %>%
+    select(ano,ocorrencia) %>% filter(ano>2000) %>%
+    arrange(ano) %>%
+    mutate(ano = as.character(ano)) %>% list()               
+  
+  exportJson0 <- toJSON(objeto_0)
+  
+  
+  titulo<-T_ST_P_No_SAUDE$TITULO[i]
+  subtexto<-"SEI"
+  link <-"http://sim.sei.ba.gov.br/metaside/consulta/frame_metadados.wsp?tmp.tabela=t128" 
+  
+  data_serie <- paste('[',gsub(' ',',',
+                               paste(paste(as.vector(objeto_0[[1]]$consumo)),
+                                     collapse = ' ')),']',sep = '')
+  
+  texto<-paste('{"title":{"text":"',titulo,
+               '","subtext":"',subtexto,
+               '","sublink":"',link,'"},',
+               '"tooltip":{"trigger":"axis"},',
+               '"toolbox":{"left":"center","orient":"horizontal","itemSize":20,"top":45,"show":true,',
+               '"feature":{"dataZoom":{"yAxisIndex":"none"},',
+               '"dataView":{"readOnly":false},"magicType":{"type":["line","bar"]},',
+               '"restore":{},"saveAsImage":{}}},"xAxis":{"type":"category",',
+               '"data":["2006","2007","2008","2009","2010","2011","2012","2013","2014","2015","2016","2017","2018","2019"]},',
+               '"yAxis":{"type":"value","axisLabel":{"formatter":"{value}"}},',
+               '"series":[{"data":',data_serie,',',
+               '"type":"bar","color":"#fe4641","showBackground":true,',
+               '"backgroundStyle":{"color":"rgba(180, 180, 180, 0.2)"},',
+               '"itemStyle":{"borderRadius":10,"borderColor":"#fe4641","borderWidth":2}}]}',sep='')
+  
+  texto<-noquote(texto)
+  
+  write(exportJson0,file = paste('data/',gsub('.js','',T_ST_P_No_SAUDE$`NOME ARQUIVO JS`[i]),
+                                 '.json',sep =''))
+  write(texto,file = paste('data/',T_ST_P_No_SAUDE$`NOME ARQUIVO JS`[i],
+                           sep =''))
+  
+}
+
