@@ -117,4 +117,5 @@ for ( i in 1:length(classes)) {
   
 }
 
+# Arquivo dedicado a rotina de atualizacao global. 
 write.csv(SAIDA_POVOAMENTO,file ='data/POVOAMENTO.csv')
