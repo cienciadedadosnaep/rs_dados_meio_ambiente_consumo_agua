@@ -57,6 +57,12 @@ dados %<>% select(-id)
 T_ST_P_No_MEIOAMBIENTE <- read_csv("data/TEMA_SUBTEMA_P_No - MEIOAMBIENTE.csv")
 
 
+## Arquivo de saida 
+
+SAIDA_POVOAMENTO <- T_ST_P_No_MEIOAMBIENTE %>% 
+                    select(TEMA,SUBTEMA,PERGUNTA,CODIGO)
+SAIDA_POVOAMENTO <- as.data.frame(SAIDA_POVOAMENTO)
+
 classes <- NULL
 classes <- levels(as.factor(dados$classe))
 
@@ -101,6 +107,7 @@ for ( i in 1:length(classes)) {
                '"backgroundStyle":{"color":"rgba(180, 180, 180, 0.2)"},',
                '"itemStyle":{"borderRadius":10,"borderColor":"',corsec_recossa_azul[i],'","borderWidth":2}}]}',sep='')
   
+  SAIDA_POVOAMENTO$CODIGO[i] <- texto  
   texto<-noquote(texto)
   
   write(exportJson0,file = paste('data/',gsub('.js','',T_ST_P_No_MEIOAMBIENTE$`NOME ARQUIVO JS`[i]),
@@ -110,3 +117,4 @@ for ( i in 1:length(classes)) {
   
 }
 
+write.csv(SAIDA_POVOAMENTO,file ='data/POVOAMENTO.csv')
