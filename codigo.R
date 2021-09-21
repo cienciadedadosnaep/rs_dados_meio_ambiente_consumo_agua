@@ -60,6 +60,8 @@ T_ST_P_No_MEIOAMBIENTE <- read_csv("data/TEMA_SUBTEMA_P_No - MEIOAMBIENTE.csv")
 classes <- NULL
 classes <- levels(as.factor(dados$classe))
 
+# Cores secundarias paleta pantone -
+corsec_recossa_azul <- c('#175676','#62acd1','#8bc6d2','#20cfef')
 
 for ( i in 1:length(classes)) {
   
@@ -95,9 +97,9 @@ for ( i in 1:length(classes)) {
                '"data":',data_axis,'},',
                '"yAxis":{"type":"value","axisLabel":{"formatter":"{value}"}},',
                '"series":[{"data":',data_serie,',',
-               '"type":"bar","color":"#fe4641","showBackground":true,',
+               '"type":"bar","color":"',corsec_recossa_azul[i],'","showBackground":true,',
                '"backgroundStyle":{"color":"rgba(180, 180, 180, 0.2)"},',
-               '"itemStyle":{"borderRadius":10,"borderColor":"#fe4641","borderWidth":2}}]}',sep='')
+               '"itemStyle":{"borderRadius":10,"borderColor":"',corsec_recossa_azul[i],'","borderWidth":2}}]}',sep='')
   
   texto<-noquote(texto)
   
