@@ -107,10 +107,10 @@ for ( i in 1:length(classes)) {
                '"backgroundStyle":{"color":"rgba(180, 180, 180, 0.2)"},',
                '"itemStyle":{"borderRadius":10,"borderColor":"',corsec_recossa_azul[i],'","borderWidth":2}}]}',sep='')
   
-
+  SAIDA_POVOAMENTO$CODIGO[i] <- texto   
   texto<-noquote(texto)
-  texto
-  SAIDA_POVOAMENTO$CODIGO[i] <- texto  
+ 
+  
   write(exportJson0,file = paste('data/',gsub('.js','',T_ST_P_No_MEIOAMBIENTE$`NOME ARQUIVO JS`[i]),
                                  '.json',sep =''))
   write(texto,file = paste('data/',T_ST_P_No_MEIOAMBIENTE$`NOME ARQUIVO JS`[i],
@@ -119,4 +119,6 @@ for ( i in 1:length(classes)) {
 }
 
 # Arquivo dedicado a rotina de atualizacao global. 
-write.csv(SAIDA_POVOAMENTO,file ='data/POVOAMENTO.csv',quote=FALSE)
+
+write_csv2(SAIDA_POVOAMENTO,file ='data/POVOAMENTO.csv',quote='all',escape='none')
+
