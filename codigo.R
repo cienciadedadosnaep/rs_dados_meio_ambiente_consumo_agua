@@ -60,7 +60,7 @@ T_ST_P_No_MEIOAMBIENTE <- read_csv("data/TEMA_SUBTEMA_P_No - MEIOAMBIENTE.csv")
 ## Arquivo de saida 
 
 SAIDA_POVOAMENTO <- T_ST_P_No_MEIOAMBIENTE %>% 
-                    select(TEMA,SUBTEMA,PERGUNTA,CODIGO)
+                    select(TEMA,SUBTEMA,PERGUNTA,NOME_ARQUIVO_JS)
 SAIDA_POVOAMENTO <- as.data.frame(SAIDA_POVOAMENTO)
 
 classes <- NULL
@@ -111,9 +111,9 @@ for ( i in 1:length(classes)) {
   texto<-noquote(texto)
  
   
-  write(exportJson0,file = paste('data/',gsub('.js','',T_ST_P_No_MEIOAMBIENTE$`NOME ARQUIVO JS`[i]),
+  write(exportJson0,file = paste('data/',gsub('.csv','',T_ST_P_No_MEIOAMBIENTE$`NOME ARQUIVO JS`[i]),
                                  '.json',sep =''))
-  write(texto,file = paste('data/',T_ST_P_No_MEIOAMBIENTE$`NOME ARQUIVO JS`[i],
+  write(texto,file = paste('data/',T_ST_P_No_MEIOAMBIENTE$NOME_ARQUIVO_JS[i],
                            sep =''))
   
 }
@@ -121,4 +121,12 @@ for ( i in 1:length(classes)) {
 # Arquivo dedicado a rotina de atualizacao global. 
 
 write_csv2(SAIDA_POVOAMENTO,file ='data/POVOAMENTO.csv',quote='all',escape='none')
+#quote="needed")#,escape='none')
+
+
+objeto_autm <- SAIDA_POVOAMENTO %>% list()
+exportJson_aut <- toJSON(objeto_autm)
+
+#write(exportJson_aut,file = paste('data/povoamento.json'))
+
 
