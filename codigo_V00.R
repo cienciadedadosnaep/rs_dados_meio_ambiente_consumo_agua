@@ -53,7 +53,7 @@ dados <- read_excel("data/t128.xlsx")
 names(dados)
 dados %<>% mutate(dados, `Comercial` = `Comercial`/1000)
 # Temas Subtemas Perguntas
-
+dados <- dados %>% mutate(across(`Comercial`, ~round(.x,1)))
 ##  Perguntas e titulos 
 T_ST_P_No_MEIOAMBIENTE <- read_csv("data/TEMA_SUBTEMA_P_No - MEIOAMBIENTE.csv")
 
@@ -96,13 +96,14 @@ corsec_recossa_azul <- c('#175676','#62acd1','#8bc6d2','#20cfef')
   texto<-paste('{"title":{"text":"',titulo,
                '","subtext":"',subtexto,
                '","sublink":"',link,'"},',
-               '"tooltip":{"trigger":"axis"},',
+               '"tooltip":{"trigger":"item","responsive":"true","position":"top","formatter":"{c0} M"},',
                '"toolbox":{"left":"center","orient":"horizontal","itemSize":20,"top":20,"show":true,',
                '"feature":{"dataZoom":{"yAxisIndex":"none"},',
                '"dataView":{"readOnly":false},"magicType":{"type":["line","bar"]},',
                '"restore":{},"saveAsImage":{}}},"xAxis":{"type":"category",',
                '"data":',data_axis,'},',
                '"yAxis":{"type":"value","axisLabel":{"formatter":"{value} M"}},',
+               '"graphic":[{"type":"text", "left":"center","top":"bottom","z":100, "style":{"fill":"gray","text":"Obs: Ponto é separador decimal", "font":"8px sans-srif","fontSize":12}}],',
                '"series":[{"data":',data_serie,',',
                '"type":"bar","color":"',corsec_recossa_azul[1],'","showBackground":true,',
                '"backgroundStyle":{"color":"rgba(180, 180, 180, 0.2)"},',
