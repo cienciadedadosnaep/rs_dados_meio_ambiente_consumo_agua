@@ -52,6 +52,7 @@ library(readxl)
 dados <- read_excel("data/t128.xlsx")
 names(dados)
 dados %<>% mutate(dados, `Pública` = `Pública`/1000)
+dados <- dados %>% mutate(across(`Pública`, ~round(.x,1)))
 # Temas Subtemas Perguntas
 
 ##  Perguntas e titulos 
@@ -96,13 +97,14 @@ data_serie <- paste('[',gsub(' ',',',
 texto<-paste('{"title":{"text":"',titulo,
              '","subtext":"',subtexto,
              '","sublink":"',link,'"},',
-             '"tooltip":{"trigger":"axis"},',
+             '"tooltip":{"trigger":"item","responsive":"true","position":"top","formatter":"{c0} M"},',
              '"toolbox":{"left":"center","orient":"horizontal","itemSize":20,"top":20,"show":true,',
              '"feature":{"dataZoom":{"yAxisIndex":"none"},',
              '"dataView":{"readOnly":false},"magicType":{"type":["line","bar"]},',
              '"restore":{},"saveAsImage":{}}},"xAxis":{"type":"category",',
              '"data":',data_axis,'},',
              '"yAxis":{"type":"value","axisLabel":{"formatter":"{value} M"}},',
+             '"graphic":[{"type":"text", "left":"center","top":"bottom","z":100, "style":{"fill":"gray","text":"Obs: Ponto é separador decimal", "font":"8px sans-srif","fontSize":12}}],',
              '"series":[{"data":',data_serie,',',
              '"type":"bar","color":"',corsec_recossa_azul[3],'","showBackground":true,',
              '"backgroundStyle":{"color":"rgba(180, 180, 180, 0.2)"},',
